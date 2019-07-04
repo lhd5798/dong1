@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="empReport_pdf" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="33492774-8282-4f53-9ecb-b9985aaaf58a">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#EFF7FF"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="orderDetail" uuid="f43dd070-0c13-410e-87b5-9234d5618ddc">
+		<parameter name="orderNo2" class="java.lang.String"/>
+		<queryString>
+			<![CDATA[SELECT ROWNUM
+      ,ITEM_CODE
+      ,ITEM_NAME
+      ,UNIT_OF_ORDER
+      ,ORDER_AMOUNT
+      ,UNIT_PRICE_OF_ORDER
+      ,SUM_PRICE_OF_ORDER
+FROM ORDER_DETAIL
+WHERE ORDER_NO = $P{orderNo2}]]>
+		</queryString>
+		<field name="ROWNUM" class="java.math.BigDecimal"/>
+		<field name="ITEM_CODE" class="java.lang.String"/>
+		<field name="ITEM_NAME" class="java.lang.String"/>
+		<field name="UNIT_OF_ORDER" class="java.lang.String"/>
+		<field name="ORDER_AMOUNT" class="java.lang.String"/>
+		<field name="UNIT_PRICE_OF_ORDER" class="java.lang.String"/>
+		<field name="SUM_PRICE_OF_ORDER" class="java.lang.String"/>
+		<group name="ROWNUM">
+			<groupExpression><![CDATA[$F{ROWNUM}]]></groupExpression>
+		</group>
+	</subDataset>
+	<parameter name="orderNo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT E.EMP_NAME
+, C.CUSTOMER_NAME
+, C.CUSTOMER_TEL_NUMBER
+, O.ORDER_DATE
+, O.ORDER_NO
+, MAX(OD.DUE_DATE_OF_ORDER) OVER(ORDER BY OD.ITEM_CODE) AS DUE_DATE_OF_ORDER
+FROM ORDER_INFO O, EMPLOYEE E, CUSTOMER C,ORDER_DETAIL OD
+
+WHERE O.PERSON_CODE_IN_CHARGE = E.EMP_CODE
+AND O.CUSTOMER_CODE = C.CUSTOMER_CODE
+AND O.ORDER_NO = OD.ORDER_NO
+AND O.ORDER_NO = $P{orderNo}
+AND ROWNUM = 1]]>
+	</queryString>
+	<field name="EMP_NAME" class="java.lang.String"/>
+	<field name="CUSTOMER_NAME" class="java.lang.String"/>
+	<field name="CUSTOMER_TEL_NUMBER" class="java.lang.String"/>
+	<field name="ORDER_DATE" class="java.lang.String"/>
+	<field name="ORDER_NO" class="java.lang.String"/>
+	<field name="DUE_DATE_OF_ORDER" class="java.lang.String"/>
+	<variable name="EMPLOYEE_EMP_NAME_1" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<title>
+		<band height="50">
+			<staticText>
+				<reportElement x="170" y="9" width="212" height="41" uuid="81dde6dc-7739-45d3-af60-c2d38f920aa1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="25" pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[발   주   서]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="448">
+			<rectangle>
+				<reportElement x="364" y="75" width="76" height="20" backcolor="#CCCCCC" uuid="0eb3e544-08f3-4d77-9758-1eac6cf30117"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="365" y="54" width="76" height="20" backcolor="#CCCCCC" uuid="8292377e-27a7-4d7f-9450-40ce3ba36e34"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="190" y="75" width="76" height="20" backcolor="#CCCCCC" uuid="22012e0e-9b3c-4784-b029-dd9b2434ac87"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="190" y="54" width="75" height="20" backcolor="#CCCCCC" uuid="48f25131-79cf-40a1-bd85-3c45d9d90628"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="14" y="95" width="76" height="20" backcolor="#CCCCCC" uuid="6d5dc807-33c7-4630-a869-03a2d679c262"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="14" y="75" width="76" height="20" backcolor="#CCCCCC" uuid="0bf9e9cc-b100-4c3f-924f-884e16ca8955"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="14" y="54" width="76" height="20" backcolor="#CCCCCC" uuid="371764ae-d4ad-4629-be0a-4ef446dc53ab"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="14" y="54" width="76" height="22" uuid="5547219e-05ec-4902-be2a-7e7e1bdef7be"/>
+				<textElement textAlignment="Center">
+					<font size="13" pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[작성일]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="14" y="76" width="76" height="18" uuid="63f48203-e3dc-4b17-be1a-01a8f8f23a31"/>
+				<textElement textAlignment="Center">
+					<font size="13" pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[담당자]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="14" y="97" width="76" height="18" uuid="11b53177-70a7-4b22-8a8b-12597616f794"/>
+				<textElement textAlignment="Center">
+					<font size="13" pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[주소]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="189" y="54" width="75" height="20" uuid="0369e22b-7a63-43fc-a7f9-c85a8a9b4dad"/>
+				<textElement textAlignment="Center">
+					<font size="13" pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[공급예정일]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="190" y="75" width="76" height="20" uuid="1a97e00c-be78-4f91-ad1c-cc91bb82846c"/>
+				<textElement textAlignment="Center">
+					<font size="13" pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[발주처명]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="366" y="54" width="74" height="20" uuid="24424e26-ac3d-4c35-ba59-2b9c7e49fc88"/>
+				<textElement textAlignment="Center">
+					<font size="13" pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[발주번호]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="363" y="75" width="76" height="20" uuid="348df52c-2322-48a8-81f6-69f6571ce0fe"/>
+				<textElement textAlignment="Center">
+					<font size="13" pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[연락처]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="440" y="54" width="100" height="20" uuid="24288d69-c6a1-47c6-ab95-0c690a8c42e3"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="440" y="75" width="100" height="20" uuid="155b6378-2c7c-40ff-b486-d3ec82dfa0fa"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="265" y="54" width="100" height="21" uuid="c8e62087-f5a4-421c-80ae-0bbcf2dd3e3d"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="265" y="75" width="100" height="20" uuid="1c38e5b6-bf51-4c56-98c7-9be41ee3d2f5"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="90" y="54" width="100" height="20" uuid="9b4ad166-7cbc-483f-a2f2-7e9840ec539c"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="90" y="75" width="100" height="20" uuid="7b01644c-8e00-4f8a-9422-73a850135611"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="90" y="95" width="292" height="20" uuid="ac1c8bd6-049d-47c9-af8b-536a1acdbce2"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="90" y="95" width="292" height="20" uuid="cfd9e6dc-0251-4c26-aa63-96d15e18323a"/>
+				<textElement textAlignment="Center">
+					<font pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[서울특별시 강남구 영동대로 513 혜람빌딩 (주) RaiXp Company]]></text>
+			</staticText>
+			<elementGroup>
+				<elementGroup/>
+			</elementGroup>
+			<textField>
+				<reportElement x="90" y="56" width="100" height="19" uuid="e84b8666-21bf-402f-a72a-71d8a60acfe3"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ORDER_DATE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="266" y="56" width="97" height="19" uuid="42516d21-0745-403f-9adb-95745204a6b3"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DUE_DATE_OF_ORDER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="441" y="54" width="99" height="20" uuid="2a595f3a-9dbe-414c-b838-e3bdd8490ae0"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ORDER_NO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="90" y="75" width="100" height="20" uuid="e0b504c1-11ea-4809-bb1b-28b0a3b50b47"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{EMP_NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="266" y="76" width="97" height="18" uuid="ca61999f-c58d-4faa-a32e-c2209da71c45"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CUSTOMER_NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="441" y="76" width="100" height="18" uuid="3ec6b338-9bc8-4194-b49f-2609fb5c64fb"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CUSTOMER_TEL_NUMBER}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement key="table 3" style="table 3" x="12" y="127" width="532" height="311" uuid="ebcab811-9725-46a5-ad97-5a48bebd638f"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="orderDetail" uuid="19014bd3-597b-4570-8180-90f9c1c08690">
+						<datasetParameter name="orderNo2">
+							<datasetParameterExpression><![CDATA[$P{orderNo}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="44" uuid="597db96a-36a4-477f-a089-17fff6b9307c">
+						<jr:columnHeader style="table 3_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="2" y="0" width="42" height="30" uuid="79271004-c664-4ecc-810f-b40c6bc21343"/>
+								<textElement textAlignment="Center">
+									<font size="13" isBold="true" pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+								</textElement>
+								<text><![CDATA[No]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 3_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="44" height="20" uuid="13f845cf-cb64-43e9-a36a-654881226f0c"/>
+								<textElement textAlignment="Center">
+									<font pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{ROWNUM}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="88" uuid="bd8edc54-73ba-4a64-afbf-0cf2383049ae">
+						<jr:columnHeader style="table 3_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="87" height="30" uuid="a8940a09-43b9-4703-83c9-fa7998174770"/>
+								<textElement textAlignment="Center">
+									<font size="13" isBold="true" pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+								</textElement>
+								<text><![CDATA[품번]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 3_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="87" height="20" uuid="3e0ebe70-2e81-42a3-831a-fde186b9c83f"/>
+								<textElement textAlignment="Center">
+									<font pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{ITEM_CODE}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="123" uuid="5f27056e-bb12-416a-b266-c8ef69c54edf">
+						<jr:columnHeader style="table 3_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="123" height="30" uuid="9c1ff658-e05c-4182-afef-853332a99367"/>
+								<textElement textAlignment="Center">
+									<font size="13" isBold="true" pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+								</textElement>
+								<text><![CDATA[품명]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 3_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="123" height="20" uuid="a462bdcd-a8b6-41b3-92c9-c3ebefe76bdd"/>
+								<textElement textAlignment="Center">
+									<font pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{ITEM_NAME}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="49" uuid="14564e0e-9d84-48cd-82d7-f17e83a6dd5d">
+						<jr:columnHeader style="table 3_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="49" height="30" uuid="703f2ea4-b58c-4ff3-999d-9b394a910f96"/>
+								<textElement textAlignment="Center">
+									<font size="13" isBold="true" pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+								</textElement>
+								<text><![CDATA[규격]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 3_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="49" height="20" uuid="7293ae2b-596d-468e-83d1-1216994c2844"/>
+								<textElement textAlignment="Center">
+									<font pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{UNIT_OF_ORDER}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="37" uuid="155bfea7-a98a-4391-8048-0cca20cdffe6">
+						<jr:columnHeader style="table 3_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="37" height="30" uuid="07c22b6e-638c-41e2-b0f9-0be9ade26139"/>
+								<textElement textAlignment="Center">
+									<font size="13" isBold="true" pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+								</textElement>
+								<text><![CDATA[수량]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 3_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="37" height="20" uuid="9ce25a49-5671-4bda-a920-c46874878bd7"/>
+								<textElement textAlignment="Center">
+									<font pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{ORDER_AMOUNT}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="c920ef44-ff61-4193-8590-f0e20392a3f1">
+						<jr:columnHeader style="table 3_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="06860fe5-82e1-472f-a199-6bbbfdefdf6f"/>
+								<textElement textAlignment="Center">
+									<font size="13" isBold="true" pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+								</textElement>
+								<text><![CDATA[단가]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 3_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="8346222c-7ae5-463f-a090-c9dadf4fdad7"/>
+								<textElement textAlignment="Center">
+									<font pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{UNIT_PRICE_OF_ORDER}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="1b0c651b-a937-41da-bfe2-3328d6fb12b2">
+						<jr:columnHeader style="table 3_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="887e3f29-9f35-45eb-b27c-5e9089450e97"/>
+								<textElement textAlignment="Center">
+									<font size="13" isBold="true" pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+								</textElement>
+								<text><![CDATA[합계]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 3_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="d1f2c74d-77a4-4e92-9a0b-b1a449289e80"/>
+								<textElement textAlignment="Center">
+									<font pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{SUM_PRICE_OF_ORDER}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="50">
+			<staticText>
+				<reportElement x="205" y="9" width="152" height="30" uuid="0e8854e7-1af4-4039-9614-9e2e7c03f325"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="15" pdfFontName="C:\tomcat8.5\webapps\raimip\WEB-INF\report\HYGSRB.TTF" pdfEncoding="Identity-H" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[(주) RaiXp Company]]></text>
+			</staticText>
+		</band>
+	</lastPageFooter>
+</jasperReport>
